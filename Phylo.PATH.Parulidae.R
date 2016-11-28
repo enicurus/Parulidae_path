@@ -500,3 +500,41 @@ results.dat <- results.dat[order(results.dat$CICc), ]
 print(results.dat) 
 
 write.table(results.dat,file="~/Dropbox/Warbler.Molt.Migration/PATHResults.txt",quote=FALSE)
+
+
+
+
+
+library(phytools)
+library(ggplot2)
+library(geiger)
+
+ppTrees<-read.nexus("/Users/ryanterrill/Dropbox/Warbler.Molt.Migration/Emberizoid_trees/sptree_posterior_4000.nex") 
+
+war_PA<-read.csv("/Users/ryanterrill/Dropbox/Warbler.Molt.Migration/Evolution\ figures/Parulidae_PA.csv")
+war_PA[is.na(war_PA)]<-0
+
+
+notWarbs<-setdiff(ppTrees[[1]]$tip.label,war_PA$tree_taxon)
+
+
+ppWarb<-llply(ppTrees,drop.tip,tip=notWarbs,.progress="text")
+class(ppWarb)<-"multiPhylo"
+
+###Calculate lambda, AIC, logLik, and brownian parameters under ER and ARD models
+
+#ER
+
+pa_ER<-llply(ppWarb,fitDicsrete,
+sex_dim_ER
+season_dim_ER
+migratio_ER
+daylength_ER
+
+#ARD
+
+pa_ARD
+sex_dim_ARD
+season_dim_ARD
+migratio_ARD
+daylength_ARD

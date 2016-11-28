@@ -520,21 +520,44 @@ notWarbs<-setdiff(ppTrees[[1]]$tip.label,war_PA$tree_taxon)
 
 ppWarb<-llply(ppTrees,drop.tip,tip=notWarbs,.progress="text")
 class(ppWarb)<-"multiPhylo"
+ppWarb<-ppWarb[1:100]
 
-###Calculate lambda, AIC, logLik, and brownian parameters under ER and ARD models
+###Model Fitting
 
-#ER
 
-pa_ER<-llply(ppWarb,fitDicsrete,
-sex_dim_ER
-season_dim_ER
-migratio_ER
-daylength_ER
+PA.v<-PA$PA;names(PA.v)<-PA$Birdlife
+sexDim.v<-
+seadim.v
+mig.v
+osl.v
 
-#ARD
 
-pa_ARD
-sex_dim_ARD
-season_dim_ARD
-migratio_ARD
-daylength_ARD
+#Lambda
+pa_ER<-llply(ppWarb,fitContinuous,PA.v,model="lambda",.progress="text")
+
+pa_ER_lambda<-matrix(nrow=100,ncol=1)
+for(i in 1:length(pa_ER)){pa_ER_lambda[i,1]<-pa_ER[[i]]$opt$lambda}
+
+sex_dim_ER<-llply(ppWarb,fitContinuous,sexDim,model="lambda".progress="text")
+season_dim_ER<-llply(ppWarb,fitContinuous,seaDim,model="lambda",.progress="text")
+migration_ER<-llply(ppWarb,fitContinuous,migDist,model="lambda",.progress="text")
+
+
+#test Evolutionary model for extant of PA, dimorphism, and migration
+
+#BM
+
+pa_BM<-llply(ppWarb,fitDicsrete,PA.v,model="BM",.progress="text")
+sex_dim_BM<-llply(ppWarb,fitDicsrete,sexDim,model="BM",.progress="text")
+season_dim_BM<-llply(ppWarb,fitDicsrete,seaDim,model="BM",.progress="text")
+migration_BM<-llply(ppWarb,fitDicsrete,migDist,model="BM",.progress="text")
+
+
+#OU
+
+pa_OU<-llply(ppWarb,fitDicsrete,PA.v,model="OU",.progress="text")
+sex_dim_OU<-llply(ppWarb,fitDicsrete,sexDim,model="OU",.progress="text")
+season_dim_OU<-llply(ppWarb,fitDicsrete,seaDim,model="OU",.progress="text")
+migration_OU<-llply(ppWarb,fitDicsrete,migDist,model="OU",.progress="text")
+
+
